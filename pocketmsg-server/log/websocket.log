@@ -1,1 +1,6 @@
 
+[08/10/2018 22:35:33] 101 GET /v1/ws/ (127.0.0.1) 33.54ms
+[08/10/2018 22:35:33] WebSocket opened, 20643d35-feab-4825-bcc6-3ab1845dd450
+[08/10/2018 22:35:37] Come message wearzxtcyv from id 1 and sessid 20643d35-feab-4825-bcc6-3ab1845dd450
+[08/10/2018 22:35:48] Come message exit from id 1 and sessid 20643d35-feab-4825-bcc6-3ab1845dd450
+[08/10/2018 22:35:48] WebSocket closed, 20643d35-feab-4825-bcc6-3ab1845dd450
