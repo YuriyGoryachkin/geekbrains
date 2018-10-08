@@ -47,7 +47,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler, JsonHandler):
 
     def on_message(self, message):
         logging.info(f'Come message {message} from id {self.uid} and sessid {self.session}')
-        json_data = '1'
+        json_data = ''
         try:
             json_data = tornado.escape.json_decode(message)
             json_data['sender'] = self.session
