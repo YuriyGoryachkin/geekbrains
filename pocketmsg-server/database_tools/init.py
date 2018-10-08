@@ -1,11 +1,10 @@
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, MetaData, DateTime
 from sqlalchemy import create_engine
-# from .db_connect import POSTGRES_SERVER, POSTGRES_PORT, POSTGRES_LOGIN, POSTGRES_PASS, POSTGRES_BASE
+from database_tools.db_connect import POSTGRES_SERVER, POSTGRES_PORT, POSTGRES_LOGIN, POSTGRES_PASS, POSTGRES_BASE
 
-engine = create_engine(
-    'postgresql+psycopg2://{0}:{1}@{2}:{3}/{4}'.format('test_user', 'qwerty', '127.0.0.1',
-                                                       '5432',
-                                                       'test_database'), echo=True)
+engine = create_engine('postgresql+psycopg2://{0}:{1}@{2}:{3}/{4}'.format(POSTGRES_LOGIN, POSTGRES_PASS, POSTGRES_SERVER,
+                                                       POSTGRES_PORT,
+                                                       POSTGRES_BASE))
 meta = MetaData(bind=engine)
 
 users = Table('users', meta,

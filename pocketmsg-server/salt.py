@@ -1,1 +1,1 @@
-salt = '50ed1d736a314759'
+salt = 'XXXXXXXXXXXXXXXXXXX'
