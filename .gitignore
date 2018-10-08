@@ -1,6 +1,7 @@
 /lesson-1/Messenger/.idea/
 /lesson-1/Messenger/__pycache__/
-*.log
 /lesson-1/Messenger/venv/Lib/site-packages/PyQt5/
 /lesson-1/Messenger/venv/Lib/site-packages/PyQt5-5.11.2.dist-info/
 /lesson-1/Messenger/venv/Lib/site-packages/PyQt5_sip-4.19.12.dist-info/
+/pocketmsg-server/.idea/
+/pocketmsg-server/__pycache__/

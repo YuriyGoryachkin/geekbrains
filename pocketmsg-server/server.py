@@ -40,8 +40,8 @@ class Application(tornado.web.Application):
         tornado.web.Application.__init__(self, handlers, **settings)
 
         self.db = db
-        q_user = self.db.query(CUsers).filter_by(username="tester3").all()
-        print(q_user)
+        # q_user = self.db.query(CUsers).filter_by(username="tester3").all()
+        # print(q_user)
 
 
 class MainHandler(BaseHandler):

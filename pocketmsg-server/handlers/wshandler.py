@@ -10,7 +10,7 @@ import os
 Пример для Windows: 
 LOG_PATCH = r'C:\\' 
 '''
-LOG_PATCH = '/home/yuriy/git/pocket-server/log'
+LOG_PATCH = '/home/yuriy/git/geekbrains/pocketmsg-server/log'
 LOG_FILE_NAME = 'websocket.log'
 LOG_FULL_PATH = os.path.join(LOG_PATCH, LOG_FILE_NAME)
 
@@ -47,7 +47,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler, JsonHandler):
 
     def on_message(self, message):
         logging.info(f'Come message {message} from id {self.uid} and sessid {self.session}')
-        json_data = ''
+        json_data = '1'
         try:
             json_data = tornado.escape.json_decode(message)
             json_data['sender'] = self.session
@@ -63,7 +63,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler, JsonHandler):
                     if len(self.ws_dict) == 1:
                         self.write_message({"response": "404", "message": "Not found receiver"})
         except ValueError:
-            message = 'Unable to parse JSON'
+            # message = 'Unable to parse JSON'
+            message = json_data
             self.write_message({"response": "400", "message": message})
         except Exception as e:
             message = 'Bad JSON'
