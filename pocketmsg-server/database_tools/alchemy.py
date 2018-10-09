@@ -23,8 +23,8 @@ class CUsers(CBase):
         self.token = token
 
     def __repr__(self):
-        return 'CUsers: uid = %d, account_name = %s, email = %s, token = %s' % (self.uid, self.username,
-                                                                                self.email, self.token)
+        return 'CUsers: uid = %d, account_name = %s, email = %s' % (self.uid, self.username,
+                                                                                self.email)
 
 
 class CMessages(CBase):
