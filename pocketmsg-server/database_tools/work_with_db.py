@@ -1,9 +1,9 @@
 from sqlalchemy.orm import sessionmaker
 from database_tools.alchemy import CUsers, CContacts, CMessages
 from database_tools.init import engine
-import time
+from datetime import datetime
 
-dtime = time.ctime(time.time())
+dtime = datetime.now()
 
 
 class ServerStorage:
@@ -31,11 +31,11 @@ class ServerStorage:
             self.session.add(verify)
             self.__commit()
 
-    def add_history(self, uid, username, message):    # CMessages
+    def add_history(self, from_id, to_id, message):    # CMessages
         """ Добавление в историю """
-        client = self._get_client_by_username(username)
-        if uid and client:
-            history = CMessages(message=message, from_id=uid, to_id=client.uid, dtime=dtime)
+        # client = self._get_client_by_username(username)
+        if from_id and to_id:
+            history = CMessages(message=message, from_id=from_id, to_id=to_id, dtime=dtime)
             self.session.add(history)
             self.__commit()
         else:

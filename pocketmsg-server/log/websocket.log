@@ -23,3 +23,7 @@
 [09/10/2018 19:11:25] WebSocket opened, 26320258-1311-4848-b7bc-516f3992b3f5
 [09/10/2018 19:11:27] Come message sdfvb from id 1 and sessid 26320258-1311-4848-b7bc-516f3992b3f5
 [09/10/2018 19:11:30] WebSocket closed, 26320258-1311-4848-b7bc-516f3992b3f5
+[09/10/2018 22:39:44] 200 GET /v1/auth/ (127.0.0.1) 0.63ms
+[09/10/2018 22:40:17] 101 GET /v1/ws/ (127.0.0.1) 148.94ms
+[09/10/2018 22:40:17] WebSocket opened, 1f3eaaf1-df9c-44f2-a0b4-e8a076e790c0
+[09/10/2018 22:40:19] Come message фвам from id 1 and sessid 1f3eaaf1-df9c-44f2-a0b4-e8a076e790c0
