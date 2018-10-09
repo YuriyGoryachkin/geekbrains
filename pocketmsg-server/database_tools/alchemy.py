@@ -9,10 +9,10 @@ class CUsers(CBase):
     __tablename__ = 'users'
 
     uid = Column(Integer(), primary_key=True)
-    username = Column(Unicode())
-    password = Column(Unicode())
+    username = Column(Unicode(), unique=True)
+    password = Column(Unicode(), unique=True)
     email = Column(Unicode())
-    token = Column(Unicode())
+    token = Column(Unicode(), unique=True)
     check_1 = UniqueConstraint('username')
     check_2 = UniqueConstraint('email')
 
