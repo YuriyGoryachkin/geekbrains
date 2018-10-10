@@ -63,8 +63,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler, JsonHandler):
                     if len(self.ws_dict) == 1:
                         self.write_message({"response": "404", "message": "Not found receiver"})
         except ValueError:
-            # message = 'Unable to parse JSON'
-            message = json_data
+            message = 'Unable to parse JSON'
             self.write_message({"response": "400", "message": message})
         except Exception as e:
             message = 'Bad JSON'
