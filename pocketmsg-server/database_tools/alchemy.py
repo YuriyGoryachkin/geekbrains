@@ -9,10 +9,10 @@ class CUsers(CBase):
     __tablename__ = 'users'
 
     uid = Column(Integer(), primary_key=True)
-    username = Column(Unicode())
+    username = Column(Unicode(), unique=True)
     password = Column(Unicode())
     email = Column(Unicode())
-    token = Column(Unicode())
+    token = Column(Unicode(), unique=True)
     check_1 = UniqueConstraint('username')
     check_2 = UniqueConstraint('email')
 
@@ -23,8 +23,8 @@ class CUsers(CBase):
         self.token = token
 
     def __repr__(self):
-        return 'CUsers: uid = %d, account_name = %s, email = %s, token = %s' % (self.uid, self.username,
-                                                                                self.email, self.token)
+        return 'CUsers: uid = %d, account_name = %s, email = %s' % (self.uid, self.username,
+                                                                                self.email)
 
 
 class CMessages(CBase):
