@@ -12,6 +12,7 @@ from handlers.chatshandler import ChatsHandler
 from handlers.wshandler import WebSocketHandler
 from handlers.wshandler_echo import WebSocketHandlerEcho
 from database_tools.db_connect import Session
+from database_tools.alchemy import CUsers
 
 define("port", default=8888, help="start on the given port", type=int)
 
@@ -39,6 +40,8 @@ class Application(tornado.web.Application):
         tornado.web.Application.__init__(self, handlers, **settings)
 
         self.db = db
+        # q_user = self.db.query(CUsers).filter_by(username="tester3").all()
+        # print(q_user)
 
 
 class MainHandler(BaseHandler):
@@ -50,10 +53,11 @@ class MainHandler(BaseHandler):
 def main():
     print('Start server')
     tornado.options.parse_command_line()
-    http_server = tornado.httpserver.HTTPServer(Application(), ssl_options={
-        "certfile": "/var/www/ca/fullchain.pem",
-        "keyfile": "/var/www/ca/privkey.pem",
-    })
+    # http_server = tornado.httpserver.HTTPServer(Application(), ssl_options={
+    #     "certfile": "/var/www/ca/fullchain.pem",
+    #     "keyfile": "/var/www/ca/privkey.pem",
+    # })
+    http_server = tornado.httpserver.HTTPServer(Application())
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
 
