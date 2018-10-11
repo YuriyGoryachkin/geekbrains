@@ -5,3 +5,10 @@
 /lesson-1/Messenger/venv/Lib/site-packages/PyQt5_sip-4.19.12.dist-info/
 /pocketmsg-server/.idea/
 /pocketmsg-server/__pycache__/
+/pocketmsg-server/server_my.py
+/pocketmsg-server/salt.py
+/pocketmsg-server/log/
+/pocketmsg-server/database_tools/db_config.py
+
+/pocketmsg-server/client.py
+/pocketmsg-server/add_user.py
