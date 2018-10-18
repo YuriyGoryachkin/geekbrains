@@ -13,7 +13,8 @@ users = Table('users', meta,
               Column('username', String),
               Column('password', String),
               Column('email', String),
-              Column('token', String))
+              Column('token', String),
+              Column('tokenexp', DateTime))
 
 messages = Table('messages', meta,
                  Column('mid', Integer, primary_key=True),
@@ -26,5 +27,21 @@ contacts = Table('contacts', meta,
                  Column('cid', Integer, primary_key=True),
                  Column('user_id', Integer, ForeignKey('users.uid')),
                  Column('contact', Integer, ForeignKey('users.uid')))
+
+#-------------------------------------------------------------------
+groups = Table('groups', meta,
+              Column('uid', Integer, primary_key=True),
+              Column('groupname', String),
+              Column('creation_date', DateTime),
+              Column('creater_user_id'), Integer)
+
+user_groups = Table('user_groups', meta,
+              Column('userid', ForeignKey('users.uid')),
+              Column('groupid', ForeignKey('groups.gid')))
+
+#---------------------------------------------------roles
+user_roles = Table('user_roles', meta,
+              Column('roleid', primary_key=True),
+              Column('role_name'))
 
 meta.create_all(engine)

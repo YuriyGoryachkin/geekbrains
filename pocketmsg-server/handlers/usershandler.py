@@ -41,10 +41,10 @@ class UsersHandler(JsonHandler):
                 email = self.json_data['email']
                 token = secrets.token_hex(8)
                 token_expire = self._token_expiration()
-                # user = CUsers(username=user, password=password, email=email, token=token, tokenexp=token_expire)
-                # self.db.add(user)
-                # self.db.commit()
-                ServerStorage().add_user(username=user, password=password, email=email, token=token, tokenexp=token_expire)
+                user = CUsers(username=user, password=password, email=email, token=token, tokenexp=token_expire)
+                self.db.add(user)
+                self.db.commit()
+                # ServerStorage().add_user(username=user, password=password, email=email, token=token, tokenexp=token_expire)
                 self.set_status(201, reason='Created')
                 self.response['token'] = token
                 self.write_json()
