@@ -1,25 +1,28 @@
 from handlers.json_util import JsonHandler
 from database_tools.alchemy import CUsers, CContacts
-from tornado.web import RequestHandler
 import secrets
-
-from database_tools.work_with_db import ServerStorage   # Добавил класс из work_with_db.py
+from database_tools.work_with_db import ServerStorage
 
 
 class UsersHandler(JsonHandler):
-
     def get(self, *args):
-        uid = self._token_check()
-        if uid:
+        check_result = self._token_check()
+        if check_result:
             # пока убрал запросы ко всей бд, потому как сейчас отсутствует реализация пользователя-админа
             # self._get_elements(session, CUsers)
-            self._get_filtered(self.db, CUsers, uid)
-            self.response['response'] = '200'
+            # self._get_filtered(self.db, CUsers, uid)
+            result = self.db.query(CUsers).filter(CUsers.uid == check_result.uid).one_or_none()     ###
+            ServerStorage().check_token_one_or_none(check_result)       ###
+            self.response['uid'] = result.uid
+            self.response['account_name'] = result.username
+            self.response['email'] = result.email
+            self.set_status(200)
             self.write_json()
 
     def post(self):
         try:
-            result_email = self.db.query(CUsers.email).filter(CUsers.email == self.json_data['email']).all()
+            result_email = self.db.query(CUsers.email).filter(CUsers.email == self.json_data['email']).all()        ###
+            ServerStorage().check_email_all(self.json_data['email'])        ###
             if len(result_email) > 0:
                 message = 'Conflict, mail exist'
                 self.send_error(409, message=message)
@@ -28,7 +31,8 @@ class UsersHandler(JsonHandler):
 
         try:
             result = self.db.query(CUsers.username).filter(
-                CUsers.username == self.json_data['account_name']).one_or_none()
+                CUsers.username == self.json_data['account_name']).one_or_none()        ###
+            ServerStorage().check_name_one_or_none(self.json_data['account_name'])      ###
 
             if result is None:
                 user = self.json_data['account_name']
@@ -36,13 +40,11 @@ class UsersHandler(JsonHandler):
                 password = self._create_sha(password)
                 email = self.json_data['email']
                 token = secrets.token_hex(8)
-                # user = CUsers(username=user, password=password, email=email, token=token)
+                token_expire = self._token_expiration()
+                # user = CUsers(username=user, password=password, email=email, token=token, tokenexp=token_expire)
                 # self.db.add(user)
                 # self.db.commit()
-                ServerStorage().add_user(username=user,
-                                         password=password,
-                                         email=email,
-                                         token=token)   # Добавление нового юзера через work_with_db.py
+                ServerStorage().add_user(username=user, password=password, email=email, token=token, tokenexp=token_expire)
                 self.set_status(201, reason='Created')
                 self.response['token'] = token
                 self.write_json()
@@ -50,28 +52,28 @@ class UsersHandler(JsonHandler):
                 message = 'Conflict, user exists'
                 self.send_error(409, message=message)
 
-        except:
+        except Exception as e:
             self.send_error(400, message='Bad JSON, need account_name')
 
     def put(self):
-        uid = self._token_check()
-        if uid:
+        check_result = self._token_check()
+        if check_result:
             contact = self.json_data['contact']
-            # contact = self.db.query(CUsers).filter(CUsers.email == contact).one_or_none()
-            # new_contact = CContacts(user_id=uid, contact=contact.uid)
-            # self.db.add(new_contact)
-            # self.db.commit()
-            ServerStorage().add_contact_list(uid=uid,
-                                             contact=contact)  # Добавление в список конактов через work_with_db.py
-            self.response['contact_uid'] = contact.uid
-            self.response['response'] = '201'
-            self.write_json()
+            contact = self.db.query(CUsers).filter(CUsers.email == contact).one_or_none()
+            if contact is None:
+                self.set_status(404, 'Contact not found')
+            else:
+                # new_contact = CContacts(user_id=check_result.uid, contact=contact.uid)
+                # self.db.add(new_contact)
+                # self.db.commit()
+                ServerStorage().add_contact_list(uid=check_result.uid, contact=contact.uid)
+                self.set_status(201, 'Created')
 
 
 class UsersHandlerId(UsersHandler):
     def get(self, user_id):
-        uid = self._token_check()
-        if uid:
+        check_result = self._token_check()
+        if check_result:
             result = self.db.query(CUsers).filter(CUsers.uid == user_id).one_or_none()
             if result is None:
                 self.set_status(404, 'User not found')
