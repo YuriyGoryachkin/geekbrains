@@ -13,7 +13,7 @@ class CUsers(CBase):
     password = Column(Unicode())
     email = Column(Unicode())
     token = Column(Unicode())
-    tokenexp = Column(Unicode())
+    tokenexp = Column(DateTime())
     check_1 = UniqueConstraint('username')
     check_2 = UniqueConstraint('email')
     status_id = Column(Integer(), ForeignKey('status_of_user.usid'))

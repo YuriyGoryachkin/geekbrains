@@ -19,7 +19,7 @@ class SearchHandlers(JsonHandler):
     #                 self.write_json()
     #         except:
     #             self.send_error(400, reason='No or bad request body')
-    def post(self):
+    def get(self):
         if self.check_result:
             try:
                 contact = self.json_data['search']
