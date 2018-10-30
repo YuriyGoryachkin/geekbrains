@@ -17,6 +17,7 @@ class CUsers(CBase):
     check_1 = UniqueConstraint('username')
     check_2 = UniqueConstraint('email')
     status_id = Column(Integer(), ForeignKey('status_of_user.usid'))
+    role_id = Column(Integer(), ForeignKey('user_roles.roleid'))
 
     def __repr__(self):
         return 'CUsers: uid = %d, account_name = %s, email = %s' % (self.uid, self.username, self.email)
@@ -27,6 +28,15 @@ class CUserStatus(CBase):
 
     usid = Column(Integer(), primary_key=True)
     status_name = Column(Unicode())
+
+    def __repr__(self):
+        return 'CUserStatus: usid = %d, status = %s' % (self.usid, self.status_name)
+
+class CUserRoles(CBase):
+    __tablename__ = 'user_roles'
+
+    roleid = Column(Integer(), primary_key=True)
+    role_name = Column(Unicode())
 
     def __repr__(self):
         return 'CUserStatus: usid = %d, status = %s' % (self.usid, self.status_name)

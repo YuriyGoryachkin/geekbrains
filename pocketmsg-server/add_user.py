@@ -23,10 +23,10 @@ name = 'tester3'
 password = 'qwerty'
 email = 'mte@gmail.com'
 token = 'd53e124e6b31e34d'
-print(token_expiration().timestamp())
+time = token_expiration().timestamp()
 
 
 
-add_user = CUsers(username=name, password=password, email=email, token=token)
+add_user = CUsers(username=name, password=password, email=email, token=token, tokenexp=time, status_id='')
 session.add(add_user)
 session.commit()

@@ -2,6 +2,9 @@ from sqlalchemy import Table, Column, Integer, String, ForeignKey, MetaData, Dat
 from sqlalchemy import create_engine
 from database_tools.db_connect import POSTGRES_SERVER, POSTGRES_PORT, POSTGRES_LOGIN, POSTGRES_PASS, POSTGRES_BASE
 
+from database_tools.alchemy import CUserStatus, CUserRoles
+from sqlalchemy.orm import sessionmaker
+
 engine = create_engine(
     'postgresql+psycopg2://{0}:{1}@{2}:{3}/{4}'.format(POSTGRES_LOGIN, POSTGRES_PASS, POSTGRES_SERVER,
                                                        POSTGRES_PORT,
@@ -14,7 +17,9 @@ users = Table('users', meta,
               Column('password', String),
               Column('email', String),
               Column('token', String),
-              Column('tokenexp', DateTime)
+              Column('tokenexp', DateTime),
+              Column('status_id', Integer),
+              Column('role_id', Integer)
               )
 
 messages = Table('messages', meta,
@@ -45,4 +50,23 @@ user_roles = Table('user_roles', meta,
               Column('roleid', Integer, primary_key=True),
               Column('role_name', String))
 
+status_of_user = Table('status_of_user', meta,
+                       Column('usid', Integer, primary_key=True),
+                       Column('status_name', String))
+
 meta.create_all(engine)
+
+Session = sessionmaker(bind=engine)
+session = Session()
+
+session.add_all([CUserRoles(role_name='admin'),
+                 CUserRoles(role_name='teacher'),
+                 CUserRoles(role_name='student'),
+                 CUserRoles(role_name='admin_group'),
+                 CUserRoles(role_name='user'),
+                 CUserStatus(status_name='online'),
+                 CUserStatus(status_name='offline'),
+                 CUserStatus(status_name='banned'),
+                 CUserStatus(status_name='not confirmed'),
+                 ])
+session.commit()
