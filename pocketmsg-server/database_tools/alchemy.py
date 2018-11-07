@@ -39,7 +39,7 @@ class CUserRoles(CBase):
     role_name = Column(Unicode())
 
     def __repr__(self):
-        return 'CUserStatus: usid = %d, status = %s' % (self.usid, self.status_name)
+        return 'CUserStatus: roleid = %d, role_name = %s' % (self.roleid, self.role_name)
 
 
 class CMessages(CBase):
