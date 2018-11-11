@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, Unicode, UniqueConstraint, ForeignKey, MetaData, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+import datetime
 
 CBase = declarative_base()
 
@@ -72,16 +73,41 @@ class CContacts(CBase):
 class CGroups(CBase):
         __tablename__ = 'groups'
         gid = Column(Integer(), primary_key=True)
-        creation_time = Column(DateTime())
+        creation_date = Column(DateTime(), default=datetime.datetime.utcnow())
         group_name = Column(Unicode())
         creater_user_id = Column(Integer())
+        category_group = Column(Integer(), ForeignKey('category_group.category_id'))      ############
+
         def __repr__(self):
             return 'CGroups<gid = %d,  name = %d' % (self.gid, self.group_name)
+
+
+class CCollGroup(CBase):        ############
+    """ Коллекция групп ("группы в группе")"""
+    __tablename__ = 'coll_group'
+    collgroup_id = Column(Integer(), ForeignKey('groups.gid'), primary_key=True)
+    group_id = Column(Integer(), ForeignKey('groups.gid'), primary_key=True)
+
+    def __repr__(self):
+        return 'CCollGroup<collgroup_id = {}, group_id = {}'.format(self.collgroup_id, self.group_id)
+
+
+class CCategoryGroup(CBase):        ############
+    """ Категории групп(обычная или мультигруппа """
+    __tablename__ = 'category_group'
+    category_id = Column(Integer(), primary_key=True)
+    category_name = Column(Unicode())
+
+    def __repr__(self):
+        return 'CCategoryGroup<category_id = {}, category_name = {}'.format(self.category_id, self.category_name)
 
 
 class CGroupsUsers(CBase):
     __tablename__ = 'user_groups'
 
-    user_id = Column(Integer(), ForeignKey('users.uid'),primary_key=True)
+    user_id = Column(Integer(), ForeignKey('users.uid'), primary_key=True)
     group_id = Column(Integer(), ForeignKey('groups.gid'), primary_key=True)
+
+    def __repr__(self):
+        return 'CGroupUsers<user_id = {}, group_id = {}'.format(self.user_id, self.group_id)
 
