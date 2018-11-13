@@ -70,11 +70,11 @@ class UsersHandler(JsonHandler):
             try:
                 user_uid = self.json_data['uid']
                 user = self.db.query(CUsers).filter(CUsers.uid == user_uid).one_or_none()  # first or default
-                """!!!!!!!!"""
-                status_id = user.status_id      ##############
                 if user is None:
                     self.set_status(404, 'User not found')
                 else:
+                    """!!!!!!!!"""
+                    status_id = user.status_id  ##############
                     user = self.json_data['account_name']
                     password = self.json_data['password']
                     password = self._create_sha(password)
@@ -145,8 +145,8 @@ class UsersHandlerSearchByNickname(UsersHandler):
                 else:
                     for user in result:
                         json_mess = {
-                                    'account_name': user.username,
-                                    'email': user.email
+                            'account_name': user.username,
+                            'email': user.email
                         }
                         self.response[user.uid] = json_mess
                     self.write_json()
