@@ -18,7 +18,7 @@ class CUsers(CBase):
     check_1 = UniqueConstraint('username')
     check_2 = UniqueConstraint('email')
     status_id = Column(Integer(), ForeignKey('status_of_user.usid'))
-    role_id = Column(Integer(), ForeignKey('user_roles.roleid'))
+    role_id = Column(Integer(), ForeignKey('user_roles.role_id'))
 
     def __repr__(self):
         return 'CUsers: uid = %d, account_name = %s, email = %s' % (self.uid, self.username, self.email)
@@ -36,11 +36,13 @@ class CUserStatus(CBase):
 class CUserRoles(CBase):
     __tablename__ = 'user_roles'
 
-    roleid = Column(Integer(), primary_key=True)
+    role_id = Column(Integer(), primary_key=True)
     role_name = Column(Unicode())
 
+    # p_role_id = relationship('CUsers', foreign_keys=[role_id])
+
     def __repr__(self):
-        return 'CUserStatus: roleid = %d, role_name = %s' % (self.roleid, self.role_name)
+        return 'CUserStatus: role_id = %d, role_name = %s' % (self.role_id, self.role_name)
 
 
 class CMessages(CBase):
@@ -56,7 +58,7 @@ class CMessages(CBase):
     p_to_id = relationship('CUsers', foreign_keys=[to_id])
 
     def __repr__(self):
-        return 'CMessages<mid = %d, from_id = %d, to_id = %d, message = %s' % (
+        return 'CMessages: mid = %d, from_id = %d, to_id = %d, message = %s' % (
             self.mid, self.from_id, self.to_id, self.message)
 
 
@@ -67,7 +69,7 @@ class CContacts(CBase):
     contact = Column(Integer(), ForeignKey('users.uid'))
 
     def __repr__(self):
-        return 'CContacts<cid = %d, user_id = %d, contact = %d' % (self.cid, self.user_id, self.contact)
+        return 'CContacts: cid = %d, user_id = %d, contact = %d' % (self.cid, self.user_id, self.contact)
     
 #------------------------------------------------
 class CGroups(CBase):
@@ -79,7 +81,7 @@ class CGroups(CBase):
         category_group = Column(Integer(), ForeignKey('category_group.category_id'))      ############
 
         def __repr__(self):
-            return 'CGroups<gid = %d,  name = %d' % (self.gid, self.group_name)
+            return 'CGroups: gid = %d,  name = %s' % (self.gid, self.group_name)
 
 
 class CCollGroup(CBase):        ############
@@ -88,8 +90,11 @@ class CCollGroup(CBase):        ############
     collgroup_id = Column(Integer(), ForeignKey('groups.gid'), primary_key=True)
     group_id = Column(Integer(), ForeignKey('groups.gid'), primary_key=True)
 
+    p_collgroup_id = relationship('CGroups', foreign_keys=[collgroup_id])
+    p_group_id = relationship('CGroups', foreign_keys=[group_id])
+
     def __repr__(self):
-        return 'CCollGroup<collgroup_id = {}, group_id = {}'.format(self.collgroup_id, self.group_id)
+        return 'CCollGroup: collgroup_id = {}, group_id = {}'.format(self.collgroup_id, self.group_id)
 
 
 class CCategoryGroup(CBase):        ############
@@ -98,8 +103,10 @@ class CCategoryGroup(CBase):        ############
     category_id = Column(Integer(), primary_key=True)
     category_name = Column(Unicode())
 
+    p_category_id = relationship('CGroups', foreign_keys=[category_id])
+
     def __repr__(self):
-        return 'CCategoryGroup<category_id = {}, category_name = {}'.format(self.category_id, self.category_name)
+        return 'CCategoryGroup: category_id = {}, category_name = {}'.format(self.category_id, self.category_name)
 
 
 class CGroupsUsers(CBase):
@@ -109,5 +116,4 @@ class CGroupsUsers(CBase):
     group_id = Column(Integer(), ForeignKey('groups.gid'), primary_key=True)
 
     def __repr__(self):
-        return 'CGroupUsers<user_id = {}, group_id = {}'.format(self.user_id, self.group_id)
-
+        return 'CGroupUsers: user_id = {}, group_id = {}'.format(self.user_id, self.group_id)

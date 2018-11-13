@@ -2,8 +2,8 @@ from sqlalchemy import Table, Column, Integer, String, ForeignKey, MetaData, Dat
 from sqlalchemy import create_engine
 from database_tools.db_connect import POSTGRES_SERVER, POSTGRES_PORT, POSTGRES_LOGIN, POSTGRES_PASS, POSTGRES_BASE
 
-# from database_tools.alchemy import CUserStatus, CUserRoles
-# from sqlalchemy.orm import sessionmaker
+from database_tools.alchemy import CUserStatus, CUserRoles
+from sqlalchemy.orm import sessionmaker
 
 engine = create_engine(
     'postgresql+psycopg2://{0}:{1}@{2}:{3}/{4}'.format(POSTGRES_LOGIN, POSTGRES_PASS, POSTGRES_SERVER,
@@ -19,7 +19,7 @@ users = Table('users', meta,
               Column('token', String),
               Column('tokenexp', DateTime),
               Column('status_id', Integer, ForeignKey('status_of_user.usid')),
-              Column('role_id', Integer)
+              Column('role_id', Integer, ForeignKey('user_roles.role_id'))
               )
 
 messages = Table('messages', meta,
@@ -37,7 +37,7 @@ contacts = Table('contacts', meta,
 # -------------------------------------------------------------------
 groups = Table('groups', meta,
                Column('gid', Integer, primary_key=True),
-               Column('groupname', String),
+               Column('group_name', String),
                Column('creation_date', DateTime),
                Column('creater_user_id', Integer),
                Column('category_group', Integer, ForeignKey('category_group.category_id')))
@@ -81,3 +81,4 @@ meta.create_all(engine)
 #                  CUserStatus(status_name='not confirmed'),
 #                  ])
 # session.commit()
+

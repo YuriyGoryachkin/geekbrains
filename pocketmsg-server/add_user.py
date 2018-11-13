@@ -1,8 +1,12 @@
-from database_tools.alchemy import CUsers
+from database_tools.alchemy import CUsers, CUserStatus, CUserRoles
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_tools.db_config import POSTGRES_LOGIN, POSTGRES_PASS, POSTGRES_SERVER, POSTGRES_PORT, POSTGRES_BASE
 from datetime import datetime, timedelta
+
+import hashlib
+from salt import salt
+import secrets
 
 
 def token_expiration():
@@ -20,15 +24,15 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 name = 'tester3'
-password = 'qwerty'
+password = hashlib.sha256('qwerty'.encode() + salt.encode()).hexdigest()
 email = 'mte@gmail.com'
-token = 'd53e124e6b31e34d'
-status = 1
-role = 1
+token = secrets.token_hex(8)
+status = session.query(CUserStatus).filter(CUserStatus.status_name == 'online').first()
+role = session.query(CUserRoles).filter(CUserRoles.role_name == 'admin').first()
 time = token_expiration()
 
 
 
-add_user = CUsers(username=name, password=password, email=email, token=token, tokenexp=time, status_id=status, role_id=role)
+add_user = CUsers(username=name, password=password, email=email, token=token, tokenexp=time, status_id=status.usid, role_id=role.role_id)
 session.add(add_user)
 session.commit()
